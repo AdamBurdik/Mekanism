@@ -1,19 +1,16 @@
 package me.adamix.mekanism.blocks;
 
 import me.adamix.mekanism.blocks.components.ElectricityComponent;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -47,16 +44,17 @@ public abstract class ElectricityBlock {
 		this.armorStand = armorStand;
 	}
 
-	public ElectricityComponent getComponent(Class<? extends ElectricityComponent> clazz) {
+	public <T extends ElectricityComponent> T getComponent(Class<T> clazz) {
 		if (clazz == null) {
 			throw new RuntimeException("Component class must not be null.");
 		}
 
 		for (ElectricityComponent component : componentSet) {
 			if (clazz.isAssignableFrom(component.getClass())) {
-				return component;
+				return clazz.cast(component);
 			}
 		}
+
 		return null;
 	}
 
@@ -68,8 +66,8 @@ public abstract class ElectricityBlock {
 		return getComponent(clazz) != null;
 	}
 
-	public void addComponent(ElectricityComponent component) {
-		componentSet.add(component);
+	public void addComponent(ElectricityComponent... components) {
+		componentSet.addAll(List.of(components));
 	}
 
 	public ArmorStand spawnArmorStand(Block block) {

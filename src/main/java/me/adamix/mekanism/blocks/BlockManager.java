@@ -90,4 +90,8 @@ public class BlockManager {
 		return surroundingCables;
 	}
 
+	public static ConcurrentMap<Location, ElectricityBlock> getBlocks() {
+		return blocks;
+	}
+
 }

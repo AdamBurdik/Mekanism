@@ -2,6 +2,8 @@ package me.adamix.mekanism.blocks.machines;
 
 import me.adamix.mekanism.Mekanism;
 import me.adamix.mekanism.blocks.ElectricityBlock;
+import me.adamix.mekanism.blocks.components.EnergyInputComponent;
+import me.adamix.mekanism.blocks.components.EnergyOutputComponent;
 import me.adamix.mekanism.blocks.components.EnergyStorageComponent;
 import me.adamix.mekanism.blocks.components.EnergyTransportComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -22,10 +24,10 @@ public class EnergyCube extends ElectricityBlock {
 
 	@Override
 	public void onPlace(Block block, Player player) {
-		EnergyStorageComponent energyStorageComponent = new EnergyStorageComponent(2000000, 16000);
-		EnergyTransportComponent energyTransportComponent = new EnergyTransportComponent(16000);
-		addComponent(energyStorageComponent);
-		addComponent(energyTransportComponent);
+		var energyStorageComponent = new EnergyStorageComponent(2000000);
+		var energyOutputComponent = new EnergyOutputComponent(16000);
+		var energyInputComponent = new EnergyInputComponent();
+		addComponent(energyStorageComponent, energyOutputComponent, energyInputComponent);
 
 		spawnArmorStand(block);
 	}

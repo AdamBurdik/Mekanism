@@ -5,3 +5,5 @@ api-version: '1.20'
 commands:
     mekanism:
         description: Main plugin command
+    energy:
+        description: Debug command

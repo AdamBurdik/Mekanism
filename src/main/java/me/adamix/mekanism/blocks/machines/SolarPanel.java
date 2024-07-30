@@ -3,6 +3,7 @@ package me.adamix.mekanism.blocks.machines;
 import me.adamix.mekanism.Mekanism;
 import me.adamix.mekanism.blocks.BlockManager;
 import me.adamix.mekanism.blocks.ElectricityBlock;
+import me.adamix.mekanism.blocks.components.EnergyOutputComponent;
 import me.adamix.mekanism.blocks.components.EnergyStorageComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
@@ -24,8 +25,9 @@ public class SolarPanel extends ElectricityBlock {
 
 	@Override
 	public void onPlace(Block block, Player player) {
-		EnergyStorageComponent energyStorageComponent = new EnergyStorageComponent(96000, 45);
-		addComponent(energyStorageComponent);
+		var energyStorageComponent = new EnergyStorageComponent(96000);
+		var energyOutputComponent = new EnergyOutputComponent(45);
+		addComponent(energyStorageComponent, energyOutputComponent);
 
 		block.setType(BLOCK_MATERIAL);
 		spawnArmorStand(block);

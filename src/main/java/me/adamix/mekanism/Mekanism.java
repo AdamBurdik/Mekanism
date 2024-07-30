@@ -5,6 +5,7 @@ import me.adamix.mekanism.blocks.machines.EnergyCube;
 import me.adamix.mekanism.blocks.transport.cables.CableManager;
 import me.adamix.mekanism.blocks.transport.cables.UniversalCableBasic;
 import me.adamix.mekanism.blocks.machines.SolarPanel;
+import me.adamix.mekanism.commands.EnergyCommand;
 import me.adamix.mekanism.commands.GiveMachinesCommand;
 import me.adamix.mekanism.listener.PlayerListener;
 import org.bukkit.Bukkit;
@@ -21,6 +22,7 @@ public final class Mekanism extends JavaPlugin {
 		CableManager.init(this);
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Objects.requireNonNull(getCommand("mekanism")).setExecutor(new GiveMachinesCommand());
+		Objects.requireNonNull(getCommand("energy")).setExecutor(new EnergyCommand());
 
 		BlockManager.registerBlock("solar_panel", SolarPanel.class);
 		BlockManager.registerBlock("universal_cable:basic", UniversalCableBasic.class);
