@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Mekanism:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Mekanism_jar</output-path>
+    <root id="archive" name="Mekanism.jar">
+      <element id="module-output" name="Mekanism" />
+    </root>
+  </artifact>
+</component>
