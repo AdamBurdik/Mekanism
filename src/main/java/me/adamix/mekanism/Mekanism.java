@@ -19,7 +19,6 @@ public final class Mekanism extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
-		CableManager.init(this);
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Objects.requireNonNull(getCommand("mekanism")).setExecutor(new GiveMachinesCommand());
 		Objects.requireNonNull(getCommand("energy")).setExecutor(new EnergyCommand());

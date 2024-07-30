@@ -12,4 +12,9 @@ public class EnergyTransportComponent implements ElectricityComponent{
 		return energyTransportRate;
 	}
 
+	@Override
+	public String toString() {
+		return STR."EnergyTransportComponent{energyTransportRate=\{energyTransportRate}}";
+	}
+
 }

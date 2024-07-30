@@ -32,4 +32,9 @@ public class EnergyStorageComponent implements ElectricityComponent {
 		return maxEnergyCapacity;
 	}
 
+	@Override
+	public String toString() {
+		return STR."EnergyStorageComponent{currentEnergyCapacity=\{currentEnergyCapacity},maxEnergyCapacity=\{maxEnergyCapacity}}";
+	}
+
 }

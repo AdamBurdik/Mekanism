@@ -53,6 +53,9 @@ public class EnergyCommand implements CommandExecutor {
 				));
 				return true;
 			case "info":
+				player.sendMessage(MiniMessage.miniMessage().deserialize(
+						STR."<aqua><bold>Component Set: <reset><aqua>\{electricityBlock.getComponentSet()}"
+				));
 				if (energyStorage != null) {
 					player.sendMessage(MiniMessage.miniMessage().deserialize(
 							STR."<yellow>Energy: \{energyStorage.getCurrentEnergyCapacity()}/\{energyStorage.getMaxEnergyCapacity()}"

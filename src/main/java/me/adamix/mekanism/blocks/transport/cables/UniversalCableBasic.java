@@ -1,12 +1,15 @@
 package me.adamix.mekanism.blocks.transport.cables;
 
 import me.adamix.mekanism.Mekanism;
+import me.adamix.mekanism.blocks.BlockManager;
 import me.adamix.mekanism.blocks.ElectricityBlock;
 import me.adamix.mekanism.blocks.components.EnergyTransportComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,17 +28,49 @@ public class UniversalCableBasic extends ElectricityBlock {
 		EnergyTransportComponent energyTransportComponent = new EnergyTransportComponent(3200);
 		addComponent(energyTransportComponent);
 
-		CableManager.placeCable(block, this);
+		spawnArmorStand(block);
+		onBlockUpdate(block);
 	}
 
 	@Override
 	public void onBreak(Block block, Player player) {
-		CableManager.breakCable(block, this);
+		getArmorStand().remove();
+		updateSurroundingBlocks(block);
 	}
 
 	@Override
 	public void onBlockUpdate(Block block) {
-		CableManager.updateBlock(block, this);
+		Block[] surroundingBlocks = BlockManager.getSurroundingBlocks(block);
+
+		StringBuilder stringModel = new StringBuilder();
+		for (Block surroundingBlock : surroundingBlocks) {
+			ElectricityBlock electricityBlock = BlockManager.getBlock(surroundingBlock);
+			if (electricityBlock == null || !electricityBlock.hasComponent(EnergyTransportComponent.class)) {
+				stringModel.append("0");
+			} else {
+				stringModel.append("1");
+			}
+		}
+
+		ItemStack item = getItem();
+		ItemMeta meta = item.getItemMeta();
+		meta.setCustomModelData(BLOCK_CMD + Integer.parseInt(stringModel.toString(), 2));
+		item.setItemMeta(meta);
+
+		ArmorStand oldArmorStand = getArmorStand();
+
+		ArmorStand newArmorStand = spawnArmorStand(block);
+		newArmorStand.getEquipment().setHelmet(item);
+
+		if (oldArmorStand != null) {
+			Bukkit.getScheduler().runTaskLater(Mekanism.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					oldArmorStand.remove();
+				}
+			}, 1L);
+		}
+
 	}
 
 	@Override

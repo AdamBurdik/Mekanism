@@ -10,4 +10,9 @@ public class EnergyGeneratorComponent implements ElectricityComponent{
 	public float getGenerateRate() {
 		return generateRate;
 	}
+
+	@Override
+	public String toString() {
+		return STR."EnergyGeneratorComponent{generateRate=\{generateRate}}";
+	}
 }

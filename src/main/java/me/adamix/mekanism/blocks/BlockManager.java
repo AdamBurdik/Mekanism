@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 
@@ -53,7 +54,12 @@ public class BlockManager {
 
 	public static void onBlockPlace(Block block, String blockId, Player player) {
 		ElectricityBlock electricityBlock = getBlock(blockId);
+
 		block.setType(electricityBlock.getBlockMaterial());
+		Waterlogged waterlogged = (Waterlogged) block.getBlockData();
+		waterlogged.setWaterlogged(false);
+		block.setBlockData(waterlogged);
+
 		electricityBlock.onPlace(block, player);
 		blocks.put(block.getLocation(), electricityBlock);
 		electricityBlock.updateSurroundingBlocks(block);

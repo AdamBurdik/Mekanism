@@ -70,6 +70,10 @@ public abstract class ElectricityBlock {
 		componentSet.addAll(List.of(components));
 	}
 
+	public Set<ElectricityComponent> getComponentSet() {
+		return this.componentSet;
+	}
+
 	public ArmorStand spawnArmorStand(Block block) {
 		Location armorStandLocation = block.getLocation().toCenterLocation();
 		ArmorStand armorStand = block.getWorld().spawn( armorStandLocation.add(0, 320, 0), ArmorStand.class);

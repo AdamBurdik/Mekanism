@@ -5,4 +5,9 @@ public class EnergyInputComponent implements ElectricityComponent {
 	public EnergyInputComponent() {
 	}
 
+	@Override
+	public String toString() {
+		return "EnergyInputComponent{}";
+	}
+
 }

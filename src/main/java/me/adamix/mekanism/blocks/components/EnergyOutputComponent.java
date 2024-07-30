@@ -11,4 +11,9 @@ public class EnergyOutputComponent implements ElectricityComponent {
 	public float getEnergyOutputRate() {
 		return energyOutputRate;
 	}
+
+	@Override
+	public String toString() {
+		return STR."EnergyOutputComponent{energyOutputRate=\{energyOutputRate}}";
+	}
 }
