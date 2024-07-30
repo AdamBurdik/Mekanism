@@ -32,37 +32,43 @@ public class BlockManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends ElectricityBlock> T getBlock(String id) {
-		if (id == null) {;
+	public static <T extends ElectricityBlock> T getBlock(String id, Block block) {
+		if (id == null) {
+			;
 			throw new IllegalArgumentException("Block ID must not be null.");
 		}
 
 		Class<? extends ElectricityBlock> clazz = registeredBlocks.get(id);
 
 		if (clazz == null) {
-			throw new RuntimeException("No block registered with ID: " + id);
+			throw new RuntimeException(STR."No block registered with ID: \{id}");
 		}
 
 		try {
-			Constructor<? extends ElectricityBlock> constructor = clazz.getConstructor(String.class);
-			return (T) constructor.newInstance(id);
+			Constructor<? extends ElectricityBlock> constructor = clazz.getConstructor(String.class, Block.class);
+			return (T) constructor.newInstance(id, block);
 
-		} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+		} catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+		         InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	public static <T extends ElectricityBlock> T getBlock(String id) {
+		return getBlock(id, null);
+	}
+
 	public static void onBlockPlace(Block block, String blockId, Player player) {
-		ElectricityBlock electricityBlock = getBlock(blockId);
+		ElectricityBlock electricityBlock = getBlock(blockId, block);
 
 		block.setType(electricityBlock.getBlockMaterial());
 		Waterlogged waterlogged = (Waterlogged) block.getBlockData();
 		waterlogged.setWaterlogged(false);
 		block.setBlockData(waterlogged);
 
-		electricityBlock.onPlace(block, player);
+		electricityBlock.onPlace(player);
 		blocks.put(block.getLocation(), electricityBlock);
-		electricityBlock.updateSurroundingBlocks(block);
+		electricityBlock.updateSurroundingBlocks();
 	}
 
 	public static void onBlockBreak(Block block, Player player) {
@@ -71,12 +77,12 @@ public class BlockManager {
 			return;
 		}
 		blocks.remove(block.getLocation());
-		electricityBlock.onBreak(block, player);
+		electricityBlock.onBreak(player);
 		ArmorStand armorStand = electricityBlock.getArmorStand();
 		if (armorStand != null) {
 			armorStand.remove();
 		}
-		electricityBlock.updateSurroundingBlocks(block);
+		electricityBlock.updateSurroundingBlocks();
 	}
 
 	public static ElectricityBlock getBlock(Block block) {
@@ -98,6 +104,32 @@ public class BlockManager {
 
 	public static ConcurrentMap<Location, ElectricityBlock> getBlocks() {
 		return blocks;
+	}
+
+	// TODO Make this function better
+	public static int getSide(Block sourceBlock, Block block) {
+		if (sourceBlock.getY() < block.getY()) {
+			return 0;
+		}
+		if (sourceBlock.getY() > block.getY()){
+			return 1;
+		}
+
+		if (sourceBlock.getZ() < block.getZ()) {
+			return 2;
+		}
+		if (sourceBlock.getZ() > block.getZ()) {
+			return 3;
+		}
+
+		if (sourceBlock.getX() < block.getX()) {
+			return 4;
+		}
+		if (sourceBlock.getX() > block.getX()) {
+			return 5;
+		}
+
+		return -1;
 	}
 
 }

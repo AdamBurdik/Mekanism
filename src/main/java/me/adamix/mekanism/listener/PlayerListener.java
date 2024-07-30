@@ -45,12 +45,12 @@ public class PlayerListener implements Listener {
 		if (event.getAction().isRightClick()) {
 			ElectricityBlock electricityBlock = BlockManager.getBlock(event.getClickedBlock());
 			if (electricityBlock != null) {
-				electricityBlock.onRightClick(event.getClickedBlock(), event.getPlayer());
+				electricityBlock.onRightClick(event.getPlayer());
 			}
 		} else if (event.getAction().isLeftClick()) {
 			ElectricityBlock electricityBlock = BlockManager.getBlock(event.getClickedBlock());
 			if (electricityBlock != null) {
-				electricityBlock.onLeftClick(event.getClickedBlock(), event.getPlayer());
+				electricityBlock.onLeftClick(event.getPlayer());
 			}
 		}
 	}

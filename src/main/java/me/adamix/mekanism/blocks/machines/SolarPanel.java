@@ -19,18 +19,18 @@ import org.bukkit.persistence.PersistentDataType;
 public class SolarPanel extends ElectricityBlock {
 	private static final int BLOCK_CMD = 200;
 	private static final Material BLOCK_MATERIAL = Material.BARRIER;
-	public SolarPanel(String id) {
-		super(id);
+	public SolarPanel(String id, Block block) {
+		super(id, block);
 	}
 
 	@Override
-	public void onPlace(Block block, Player player) {
+	public void onPlace(Player player) {
 		var energyStorageComponent = new EnergyStorageComponent(96000);
-		var energyOutputComponent = new EnergyOutputComponent(45);
+		var energyOutputComponent = new EnergyOutputComponent(45, new boolean[]{false, true, false, false, false, false});
 		addComponent(energyStorageComponent, energyOutputComponent);
 
-		block.setType(BLOCK_MATERIAL);
-		spawnArmorStand(block);
+		getBlock().setType(BLOCK_MATERIAL);
+		spawnArmorStand();
 	}
 
 	@Override

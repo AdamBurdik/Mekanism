@@ -2,7 +2,6 @@ package me.adamix.mekanism;
 
 import me.adamix.mekanism.blocks.BlockManager;
 import me.adamix.mekanism.blocks.machines.EnergyCube;
-import me.adamix.mekanism.blocks.transport.cables.CableManager;
 import me.adamix.mekanism.blocks.transport.cables.UniversalCableBasic;
 import me.adamix.mekanism.blocks.machines.SolarPanel;
 import me.adamix.mekanism.commands.EnergyCommand;

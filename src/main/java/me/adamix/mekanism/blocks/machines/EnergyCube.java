@@ -18,18 +18,18 @@ import org.bukkit.persistence.PersistentDataType;
 public class EnergyCube extends ElectricityBlock {
 	private static final int BLOCK_CMD = 100;
 	private static final Material BLOCK_MATERIAL = Material.BARRIER;
-	public EnergyCube(String id) {
-		super(id);
+	public EnergyCube(String id, Block block) {
+		super(id, block);
 	}
 
 	@Override
-	public void onPlace(Block block, Player player) {
+	public void onPlace(Player player) {
 		var energyStorageComponent = new EnergyStorageComponent(2000000);
-		var energyOutputComponent = new EnergyOutputComponent(16000);
-		var energyInputComponent = new EnergyInputComponent();
+		var energyOutputComponent = new EnergyOutputComponent(16000, new boolean[]{true, false, true, false, true, false});
+		var energyInputComponent = new EnergyInputComponent(new boolean[]{false, false, false, false, false, false});
 		addComponent(energyStorageComponent, energyOutputComponent, energyInputComponent);
 
-		spawnArmorStand(block);
+		spawnArmorStand();
 	}
 
 	@Override

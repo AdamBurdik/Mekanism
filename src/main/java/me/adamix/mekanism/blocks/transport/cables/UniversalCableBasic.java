@@ -3,6 +3,8 @@ package me.adamix.mekanism.blocks.transport.cables;
 import me.adamix.mekanism.Mekanism;
 import me.adamix.mekanism.blocks.BlockManager;
 import me.adamix.mekanism.blocks.ElectricityBlock;
+import me.adamix.mekanism.blocks.components.EnergyInputComponent;
+import me.adamix.mekanism.blocks.components.EnergyOutputComponent;
 import me.adamix.mekanism.blocks.components.EnergyTransportComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -19,33 +21,33 @@ public class UniversalCableBasic extends ElectricityBlock {
 	private static final int BLOCK_CMD = 5000;
 	private static final Material BLOCK_MATERIAL = Material.CONDUIT;
 
-	public UniversalCableBasic(String id) {
-		super(id);
+	public UniversalCableBasic(String id, Block block) {
+		super(id, block);
 	}
 
 	@Override
-	public void onPlace(Block block, Player player) {
+	public void onPlace(Player player) {
 		EnergyTransportComponent energyTransportComponent = new EnergyTransportComponent(3200);
 		addComponent(energyTransportComponent);
 
-		spawnArmorStand(block);
-		onBlockUpdate(block);
+		spawnArmorStand();
+		onBlockUpdate();
 	}
 
 	@Override
-	public void onBreak(Block block, Player player) {
+	public void onBreak(Player player) {
 		getArmorStand().remove();
-		updateSurroundingBlocks(block);
+		updateSurroundingBlocks();
 	}
 
 	@Override
-	public void onBlockUpdate(Block block) {
-		Block[] surroundingBlocks = BlockManager.getSurroundingBlocks(block);
+	public void onBlockUpdate() {
+		Block[] surroundingBlocks = BlockManager.getSurroundingBlocks(getBlock());
 
 		StringBuilder stringModel = new StringBuilder();
 		for (Block surroundingBlock : surroundingBlocks) {
 			ElectricityBlock electricityBlock = BlockManager.getBlock(surroundingBlock);
-			if (electricityBlock == null || !electricityBlock.hasComponent(EnergyTransportComponent.class)) {
+			if (electricityBlock == null || !electricityBlock.canConnect(getBlock())) {
 				stringModel.append("0");
 			} else {
 				stringModel.append("1");
@@ -59,7 +61,7 @@ public class UniversalCableBasic extends ElectricityBlock {
 
 		ArmorStand oldArmorStand = getArmorStand();
 
-		ArmorStand newArmorStand = spawnArmorStand(block);
+		ArmorStand newArmorStand = spawnArmorStand();
 		newArmorStand.getEquipment().setHelmet(item);
 
 		if (oldArmorStand != null) {
