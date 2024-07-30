@@ -1,7 +1,0 @@
-name: Mekanism
-version: '1.0'
-main: me.adamix.mekanism.Mekanism
-api-version: '1.20'
-commands:
-    mekanism:
-        description: Main plugin command
