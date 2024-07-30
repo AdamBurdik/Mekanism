@@ -2,6 +2,8 @@ package me.adamix.mekanism.commands;
 
 import me.adamix.mekanism.blocks.BlockManager;
 import me.adamix.mekanism.blocks.ElectricityBlock;
+import me.adamix.mekanism.blocks.components.EnergyInputComponent;
+import me.adamix.mekanism.blocks.components.EnergyOutputComponent;
 import me.adamix.mekanism.blocks.components.EnergyStorageComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.block.Block;
@@ -31,13 +33,17 @@ public class EnergyCommand implements CommandExecutor {
 			return false;
 		}
 
-		String action = args[0];
-		switch (action.toLowerCase()) {
+		EnergyStorageComponent energyStorage = null;
+		if (electricityBlock.hasComponent(EnergyStorageComponent.class)) {
+			energyStorage = electricityBlock.getComponent(EnergyStorageComponent.class);
+		}
+
+		String subcommand = args[0];
+		switch (subcommand.toLowerCase()) {
 			case "send_energy":
 				// TODO Add send energy debug command
 
 			case "fill":
-				var energyStorage = electricityBlock.getComponent(EnergyStorageComponent.class);
 				if (energyStorage == null) {
 					return false;
 				}
@@ -45,6 +51,24 @@ public class EnergyCommand implements CommandExecutor {
 				player.sendMessage(MiniMessage.miniMessage().deserialize(
 						STR."<green>Electricity block has been filled with energy! \{energyStorage.getCurrentEnergyCapacity()}/\{energyStorage.getMaxEnergyCapacity()}"
 				));
+				return true;
+			case "info":
+				if (energyStorage != null) {
+					player.sendMessage(MiniMessage.miniMessage().deserialize(
+							STR."<yellow>Energy: \{energyStorage.getCurrentEnergyCapacity()}/\{energyStorage.getMaxEnergyCapacity()}"
+					));
+				}
+				if (electricityBlock.hasComponent(EnergyInputComponent.class)) {
+					player.sendMessage(MiniMessage.miniMessage().deserialize(
+							"<yellow>Energy Input Rate: Inf"
+					));
+				}
+				if (electricityBlock.hasComponent(EnergyOutputComponent.class)) {
+					var energyOutput = electricityBlock.getComponent(EnergyOutputComponent.class);
+					player.sendMessage(MiniMessage.miniMessage().deserialize(
+							STR."<yellow>Energy Output Rate: \{energyOutput.getEnergyOutputRate()}J/t"
+					));
+				}
 		}
 
 		return false;
