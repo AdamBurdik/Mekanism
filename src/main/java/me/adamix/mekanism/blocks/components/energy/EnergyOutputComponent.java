@@ -1,8 +1,11 @@
-package me.adamix.mekanism.blocks.components;
+package me.adamix.mekanism.blocks.components.energy;
+
+import me.adamix.mekanism.blocks.components.MekanismComponent;
+import me.adamix.mekanism.blocks.components.MekanismOutputComponent;
 
 import java.util.Arrays;
 
-public class EnergyOutputComponent implements ElectricityComponent {
+public class EnergyOutputComponent implements MekanismComponent, MekanismOutputComponent {
 
 	private final float energyOutputRate;
 	private boolean[] energyOutputSides = new boolean[6];

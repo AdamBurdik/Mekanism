@@ -1,12 +1,10 @@
 package me.adamix.mekanism.blocks.machines;
 
 import me.adamix.mekanism.Mekanism;
-import me.adamix.mekanism.blocks.BlockManager;
-import me.adamix.mekanism.blocks.ElectricityBlock;
-import me.adamix.mekanism.blocks.components.EnergyOutputComponent;
-import me.adamix.mekanism.blocks.components.EnergyStorageComponent;
+import me.adamix.mekanism.blocks.MekanismBlock;
+import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
+import me.adamix.mekanism.blocks.components.energy.EnergyStorageComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -16,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 
-public class SolarPanel extends ElectricityBlock {
+public class SolarPanel extends MekanismBlock {
 	private static final int BLOCK_CMD = 200;
 	private static final Material BLOCK_MATERIAL = Material.BARRIER;
 	public SolarPanel(String id, Block block) {

@@ -1,11 +1,10 @@
 package me.adamix.mekanism.blocks.machines;
 
 import me.adamix.mekanism.Mekanism;
-import me.adamix.mekanism.blocks.ElectricityBlock;
-import me.adamix.mekanism.blocks.components.EnergyInputComponent;
-import me.adamix.mekanism.blocks.components.EnergyOutputComponent;
-import me.adamix.mekanism.blocks.components.EnergyStorageComponent;
-import me.adamix.mekanism.blocks.components.EnergyTransportComponent;
+import me.adamix.mekanism.blocks.MekanismBlock;
+import me.adamix.mekanism.blocks.components.energy.EnergyInputComponent;
+import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
+import me.adamix.mekanism.blocks.components.energy.EnergyStorageComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -15,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-public class EnergyCube extends ElectricityBlock {
+public class EnergyCube extends MekanismBlock {
 	private static final int BLOCK_CMD = 100;
 	private static final Material BLOCK_MATERIAL = Material.BARRIER;
 	public EnergyCube(String id, Block block) {

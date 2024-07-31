@@ -2,7 +2,7 @@ package me.adamix.mekanism.listener;
 
 import me.adamix.mekanism.Mekanism;
 import me.adamix.mekanism.blocks.BlockManager;
-import me.adamix.mekanism.blocks.ElectricityBlock;
+import me.adamix.mekanism.blocks.MekanismBlock;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,14 +43,14 @@ public class PlayerListener implements Listener {
 			return;
 		}
 		if (event.getAction().isRightClick()) {
-			ElectricityBlock electricityBlock = BlockManager.getBlock(event.getClickedBlock());
-			if (electricityBlock != null) {
-				electricityBlock.onRightClick(event.getPlayer());
+			MekanismBlock mekanismBlock = BlockManager.getBlock(event.getClickedBlock());
+			if (mekanismBlock != null) {
+				mekanismBlock.onRightClick(event.getPlayer());
 			}
 		} else if (event.getAction().isLeftClick()) {
-			ElectricityBlock electricityBlock = BlockManager.getBlock(event.getClickedBlock());
-			if (electricityBlock != null) {
-				electricityBlock.onLeftClick(event.getPlayer());
+			MekanismBlock mekanismBlock = BlockManager.getBlock(event.getClickedBlock());
+			if (mekanismBlock != null) {
+				mekanismBlock.onLeftClick(event.getPlayer());
 			}
 		}
 	}

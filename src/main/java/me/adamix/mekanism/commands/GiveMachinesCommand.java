@@ -13,6 +13,9 @@ public class GiveMachinesCommand implements CommandExecutor {
 		if (sender instanceof Player player) {
 			player.getInventory().addItem(BlockManager.getBlock("solar_panel").getItem());
 			player.getInventory().addItem(BlockManager.getBlock("universal_cable:basic").getItem());
+			player.getInventory().addItem(BlockManager.getBlock("universal_cable:advanced").getItem());
+			player.getInventory().addItem(BlockManager.getBlock("universal_cable:elite").getItem());
+			player.getInventory().addItem(BlockManager.getBlock("universal_cable:ultimate").getItem());
 			player.getInventory().addItem(BlockManager.getBlock("energy_cube").getItem());
 		}
 		return false;

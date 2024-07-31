@@ -1,6 +1,8 @@
-package me.adamix.mekanism.blocks.components;
+package me.adamix.mekanism.blocks.components.energy;
 
-public class EnergyGeneratorComponent implements ElectricityComponent{
+import me.adamix.mekanism.blocks.components.MekanismComponent;
+
+public class EnergyGeneratorComponent implements MekanismComponent {
 	private final float generateRate;
 
 	public EnergyGeneratorComponent(float generateRate) {

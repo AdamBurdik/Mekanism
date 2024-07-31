@@ -2,8 +2,11 @@ package me.adamix.mekanism;
 
 import me.adamix.mekanism.blocks.BlockManager;
 import me.adamix.mekanism.blocks.machines.EnergyCube;
+import me.adamix.mekanism.blocks.transport.cables.UniversalCableAdvanced;
 import me.adamix.mekanism.blocks.transport.cables.UniversalCableBasic;
 import me.adamix.mekanism.blocks.machines.SolarPanel;
+import me.adamix.mekanism.blocks.transport.cables.UniversalCableElite;
+import me.adamix.mekanism.blocks.transport.cables.UniversalCableUltimate;
 import me.adamix.mekanism.commands.EnergyCommand;
 import me.adamix.mekanism.commands.GiveMachinesCommand;
 import me.adamix.mekanism.listener.PlayerListener;
@@ -24,6 +27,9 @@ public final class Mekanism extends JavaPlugin {
 
 		BlockManager.registerBlock("solar_panel", SolarPanel.class);
 		BlockManager.registerBlock("universal_cable:basic", UniversalCableBasic.class);
+		BlockManager.registerBlock("universal_cable:advanced", UniversalCableAdvanced.class);
+		BlockManager.registerBlock("universal_cable:elite", UniversalCableElite.class);
+		BlockManager.registerBlock("universal_cable:ultimate", UniversalCableUltimate.class);
 		BlockManager.registerBlock("energy_cube", EnergyCube.class);
 
 	}

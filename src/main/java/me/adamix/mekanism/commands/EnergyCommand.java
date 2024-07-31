@@ -1,10 +1,10 @@
 package me.adamix.mekanism.commands;
 
 import me.adamix.mekanism.blocks.BlockManager;
-import me.adamix.mekanism.blocks.ElectricityBlock;
-import me.adamix.mekanism.blocks.components.EnergyInputComponent;
-import me.adamix.mekanism.blocks.components.EnergyOutputComponent;
-import me.adamix.mekanism.blocks.components.EnergyStorageComponent;
+import me.adamix.mekanism.blocks.MekanismBlock;
+import me.adamix.mekanism.blocks.components.energy.EnergyInputComponent;
+import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
+import me.adamix.mekanism.blocks.components.energy.EnergyStorageComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -28,14 +28,14 @@ public class EnergyCommand implements CommandExecutor {
 			return false;
 		}
 
-		ElectricityBlock electricityBlock = BlockManager.getBlock(block);
-		if (electricityBlock == null) {
+		MekanismBlock mekanismBlock = BlockManager.getBlock(block);
+		if (mekanismBlock == null) {
 			return false;
 		}
 
 		EnergyStorageComponent energyStorage = null;
-		if (electricityBlock.hasComponent(EnergyStorageComponent.class)) {
-			energyStorage = electricityBlock.getComponent(EnergyStorageComponent.class);
+		if (mekanismBlock.hasComponent(EnergyStorageComponent.class)) {
+			energyStorage = mekanismBlock.getComponent(EnergyStorageComponent.class);
 		}
 
 		String subcommand = args[0];
@@ -54,20 +54,20 @@ public class EnergyCommand implements CommandExecutor {
 				return true;
 			case "info":
 				player.sendMessage(MiniMessage.miniMessage().deserialize(
-						STR."<aqua><bold>Component Set: <reset><aqua>\{electricityBlock.getComponentSet()}"
+						STR."<aqua><bold>Component Set: <reset><aqua>\{mekanismBlock.getComponentSet()}"
 				));
 				if (energyStorage != null) {
 					player.sendMessage(MiniMessage.miniMessage().deserialize(
 							STR."<yellow>Energy: \{energyStorage.getCurrentEnergyCapacity()}/\{energyStorage.getMaxEnergyCapacity()}"
 					));
 				}
-				if (electricityBlock.hasComponent(EnergyInputComponent.class)) {
+				if (mekanismBlock.hasComponent(EnergyInputComponent.class)) {
 					player.sendMessage(MiniMessage.miniMessage().deserialize(
 							"<yellow>Energy Input Rate: Inf"
 					));
 				}
-				if (electricityBlock.hasComponent(EnergyOutputComponent.class)) {
-					var energyOutput = electricityBlock.getComponent(EnergyOutputComponent.class);
+				if (mekanismBlock.hasComponent(EnergyOutputComponent.class)) {
+					var energyOutput = mekanismBlock.getComponent(EnergyOutputComponent.class);
 					player.sendMessage(MiniMessage.miniMessage().deserialize(
 							STR."<yellow>Energy Output Rate: \{energyOutput.getEnergyOutputRate()}J/t"
 					));

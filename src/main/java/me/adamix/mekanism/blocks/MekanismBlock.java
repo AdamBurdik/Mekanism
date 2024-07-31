@@ -1,9 +1,10 @@
 package me.adamix.mekanism.blocks;
 
-import me.adamix.mekanism.blocks.components.ElectricityComponent;
-import me.adamix.mekanism.blocks.components.EnergyInputComponent;
-import me.adamix.mekanism.blocks.components.EnergyOutputComponent;
-import me.adamix.mekanism.blocks.components.EnergyTransportComponent;
+import me.adamix.mekanism.blocks.components.MekanismComponent;
+import me.adamix.mekanism.blocks.components.MekanismTransportComponent;
+import me.adamix.mekanism.blocks.components.energy.EnergyInputComponent;
+import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
+import me.adamix.mekanism.blocks.components.energy.EnergyTransportComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,13 +19,13 @@ import java.util.List;
 import java.util.Set;
 
 
-public abstract class ElectricityBlock {
+public abstract class MekanismBlock {
 	private final String id;
 	private final Block block;
-	private final Set<ElectricityComponent> componentSet = new HashSet<>();
+	private final Set<MekanismComponent> componentSet = new HashSet<>();
 	private ArmorStand armorStand;
 
-	public ElectricityBlock(String id, Block block) {
+	public MekanismBlock(String id, Block block) {
 		this.id = id;
 		this.block = block;
 	}
@@ -38,13 +39,25 @@ public abstract class ElectricityBlock {
 	}
 
 	public abstract ItemStack getItem();
+
 	public abstract int getBlockCMD();
+
 	public abstract Material getBlockMaterial();
-	public void onPlace(Player player) {}
-	public void onBreak(Player player) {}
-	public void onRightClick(Player player) {}
-	public void onLeftClick(Player player) {}
-	public void onBlockUpdate() {}
+
+	public void onPlace(Player player) {
+	}
+
+	public void onBreak(Player player) {
+	}
+
+	public void onRightClick(Player player) {
+	}
+
+	public void onLeftClick(Player player) {
+	}
+
+	public void onBlockUpdate() {
+	}
 
 	public ArmorStand getArmorStand() {
 		return this.armorStand;
@@ -54,12 +67,12 @@ public abstract class ElectricityBlock {
 		this.armorStand = armorStand;
 	}
 
-	public <T extends ElectricityComponent> T getComponent(Class<T> clazz) {
+	public <T extends MekanismComponent> T getComponent(Class<T> clazz) {
 		if (clazz == null) {
 			throw new RuntimeException("Component class must not be null.");
 		}
 
-		for (ElectricityComponent component : componentSet) {
+		for (MekanismComponent component : componentSet) {
 			if (clazz.isAssignableFrom(component.getClass())) {
 				return clazz.cast(component);
 			}
@@ -68,7 +81,7 @@ public abstract class ElectricityBlock {
 		return null;
 	}
 
-	public boolean hasComponent(Class<? extends ElectricityComponent> clazz) {
+	public boolean hasComponent(Class<? extends MekanismComponent> clazz) {
 		if (clazz == null) {
 			throw new RuntimeException("Component class must not be null.");
 		}
@@ -76,17 +89,17 @@ public abstract class ElectricityBlock {
 		return getComponent(clazz) != null;
 	}
 
-	public void addComponent(ElectricityComponent... components) {
+	public void addComponent(MekanismComponent... components) {
 		componentSet.addAll(List.of(components));
 	}
 
-	public Set<ElectricityComponent> getComponentSet() {
+	public Set<MekanismComponent> getComponentSet() {
 		return this.componentSet;
 	}
 
 	public ArmorStand spawnArmorStand() {
 		Location armorStandLocation = block.getLocation().toCenterLocation();
-		ArmorStand armorStand = block.getWorld().spawn( armorStandLocation.add(0, 320, 0), ArmorStand.class);
+		ArmorStand armorStand = block.getWorld().spawn(armorStandLocation.add(0, 320, 0), ArmorStand.class);
 		armorStand.setGravity(false);
 		armorStand.setInvisible(true);
 		armorStand.setInvulnerable(true);
@@ -107,41 +120,28 @@ public abstract class ElectricityBlock {
 
 	public void updateSurroundingBlocks() {
 		for (Block surroundingBlock : BlockManager.getSurroundingBlocks(block)) {
-			ElectricityBlock electricityBlock = BlockManager.getBlock(surroundingBlock);
-			if (electricityBlock == null) {
+			MekanismBlock mekanismBlock = BlockManager.getBlock(surroundingBlock);
+			if (mekanismBlock == null) {
 				continue;
 			}
-			electricityBlock.onBlockUpdate();
+			mekanismBlock.onBlockUpdate();
 		}
 	}
 
-	public boolean canConnect(Block block) {
-		if (hasComponent(EnergyTransportComponent.class)) {
-			return true;
-		}
+	// Can connect =
+	//  1. Společná strana má input / output
+	//  2. Stejný typ kabelu ( transporteru )
 
-		int side = BlockManager.getSide(getBlock(), block);
-		if (side < 0) {
-			return false;
-		}
 
-		if (hasComponent(EnergyInputComponent.class)) {
-			var energyInputComponent = getComponent(EnergyInputComponent.class);
-			boolean[] energyInputSides = energyInputComponent.getEnergyInputSides();
+	// Input
+	// Output
+	// Transport
 
-			if (energyInputSides[side]) {
-				return true;
-			}
-		}
+	// Energy, Item, Gas, Fluid
 
-		if (hasComponent(EnergyOutputComponent.class)) {
-			var energyOutputComponent = getComponent(EnergyOutputComponent.class);
-			boolean[] energyOutputSides = energyOutputComponent.getEnergyOutputSides();
 
-			return energyOutputSides[side];
-		}
-
+	public boolean canConnect(MekanismBlock mekanismBlock) {
+		// ToDo
 		return false;
 	}
-
 }

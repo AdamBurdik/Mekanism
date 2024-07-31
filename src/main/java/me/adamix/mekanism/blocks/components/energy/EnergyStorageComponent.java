@@ -1,6 +1,8 @@
-package me.adamix.mekanism.blocks.components;
+package me.adamix.mekanism.blocks.components.energy;
 
-public class EnergyStorageComponent implements ElectricityComponent {
+import me.adamix.mekanism.blocks.components.MekanismComponent;
+
+public class EnergyStorageComponent implements MekanismComponent {
 	private float currentEnergyCapacity = 0;
 	private final float maxEnergyCapacity;
 

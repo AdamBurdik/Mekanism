@@ -1,4 +1,4 @@
 package me.adamix.mekanism.blocks.components;
 
-public interface ElectricityComponent {
+public interface MekanismComponent {
 }
