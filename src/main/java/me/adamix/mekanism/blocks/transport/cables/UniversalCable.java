@@ -47,9 +47,11 @@ public class UniversalCable extends MekanismBlock {
 		StringBuilder stringModel = new StringBuilder();
 		for (Block surroundingBlock : surroundingBlocks) {
 			MekanismBlock mekanismBlock = BlockManager.getBlock(surroundingBlock);
-			if (mekanismBlock == null || !mekanismBlock.canConnect(mekanismBlock)) {
+			if (mekanismBlock == null || !mekanismBlock.canConnect(this)) {
+				System.out.println(false);
 				stringModel.append("0");
 			} else {
+				System.out.println(true);
 				stringModel.append("1");
 			}
 		}

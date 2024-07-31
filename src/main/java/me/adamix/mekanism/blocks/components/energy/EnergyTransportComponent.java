@@ -1,9 +1,8 @@
 package me.adamix.mekanism.blocks.components.energy;
 
 import me.adamix.mekanism.blocks.components.MekanismComponent;
-import me.adamix.mekanism.blocks.components.MekanismTransportComponent;
 
-public class EnergyTransportComponent implements MekanismComponent, MekanismTransportComponent {
+public class EnergyTransportComponent implements MekanismComponent {
 
 	private final int energyTransportRate;
 

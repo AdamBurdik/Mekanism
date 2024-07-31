@@ -1,7 +1,6 @@
 package me.adamix.mekanism.blocks;
 
 import me.adamix.mekanism.blocks.components.MekanismComponent;
-import me.adamix.mekanism.blocks.components.MekanismTransportComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyInputComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyTransportComponent;
@@ -14,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -128,20 +128,40 @@ public abstract class MekanismBlock {
 		}
 	}
 
-	// Can connect =
-	//  1. Společná strana má input / output
-	//  2. Stejný typ kabelu ( transporteru )
-
-
-	// Input
-	// Output
-	// Transport
-
-	// Energy, Item, Gas, Fluid
-
-
 	public boolean canConnect(MekanismBlock mekanismBlock) {
-		// ToDo
+
+		if (mekanismBlock.hasComponent(EnergyTransportComponent.class) && this.hasComponent(EnergyTransportComponent.class)) {
+			return mekanismBlock.getId().equals(this.id);
+		}
+
+		int side = BlockManager.getSide(this.block, mekanismBlock.getBlock());
+		Bukkit.getLogger().info(STR."Side: + \{side}");
+		if (side < 0) {
+			return false;
+		}
+
+		var energyInputComponent = this.getComponent(EnergyInputComponent.class);
+
+		System.out.println(STR."Energy Input Component\{energyInputComponent}");
+
+		if (energyInputComponent != null) {
+			boolean[] energyInputSides = energyInputComponent.getEnergyInputSides();
+			Bukkit.getLogger().info(STR."Input sides: \{Arrays.toString(energyInputSides)}");
+			if (energyInputSides[side]) {
+				return true;
+			}
+		}
+
+		var energyOutputComponent = this.getComponent(EnergyOutputComponent.class);
+
+		System.out.println(STR."Energy Output Component\{energyOutputComponent}");
+
+		if (energyOutputComponent != null) {
+			boolean[] energyOutputSides = energyOutputComponent.getEnergyOutputSides();
+			Bukkit.getLogger().info(STR."Input sides: \{Arrays.toString(energyOutputSides)}");
+			return energyOutputSides[side];
+		}
+
 		return false;
 	}
 }
