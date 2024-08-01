@@ -1,17 +1,15 @@
 package me.adamix.mekanism.blocks.components.energy;
 
+import me.adamix.mekanism.blocks.capabilities.CapabilityType;
+import me.adamix.mekanism.blocks.capabilities.OutputCapability;
 import me.adamix.mekanism.blocks.components.MekanismComponent;
 
 import java.util.Arrays;
 
-public class EnergyOutputComponent implements MekanismComponent {
+public class EnergyOutputComponent implements MekanismComponent, OutputCapability {
 
 	private final float energyOutputRate;
-	private boolean[] energyOutputSides = new boolean[6];
-
-	public EnergyOutputComponent(float energyOutputRate) {
-		this.energyOutputRate = energyOutputRate;
-	}
+	private boolean[] energyOutputSides;
 
 	public EnergyOutputComponent(float energyOutputRate, boolean[] energyOutputSides) {
 		this.energyOutputRate = energyOutputRate;
@@ -22,12 +20,18 @@ public class EnergyOutputComponent implements MekanismComponent {
 		return energyOutputRate;
 	}
 
-	public boolean[] getEnergyOutputSides() {
-		return energyOutputSides;
+	@Override
+	public CapabilityType getType() {
+		return CapabilityType.ENERGY;
 	}
 
 	@Override
-	public String toString() {
-		return STR."EnergyOutputComponent{energyOutputRate=\{energyOutputRate},energyOutputSides=\{Arrays.toString(energyOutputSides)}}";
+	public boolean[] getOutputSides() {
+		return this.energyOutputSides;
+	}
+
+	@Override
+	public void setOutputSides(boolean[] outputSides) {
+
 	}
 }

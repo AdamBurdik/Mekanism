@@ -1,8 +1,12 @@
 package me.adamix.mekanism.blocks.components.energy;
 
+import me.adamix.mekanism.blocks.MekanismBlock;
+import me.adamix.mekanism.blocks.capabilities.Capability;
+import me.adamix.mekanism.blocks.capabilities.CapabilityType;
+import me.adamix.mekanism.blocks.capabilities.TransportCapability;
 import me.adamix.mekanism.blocks.components.MekanismComponent;
 
-public class EnergyTransportComponent implements MekanismComponent {
+public class EnergyTransportComponent implements MekanismComponent, TransportCapability {
 
 	private final int energyTransportRate;
 
@@ -15,8 +19,7 @@ public class EnergyTransportComponent implements MekanismComponent {
 	}
 
 	@Override
-	public String toString() {
-		return STR."EnergyTransportComponent{energyTransportRate=\{energyTransportRate}}";
+	public CapabilityType getType() {
+		return CapabilityType.ENERGY;
 	}
-
 }

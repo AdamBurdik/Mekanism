@@ -1,5 +1,8 @@
 package me.adamix.mekanism.blocks;
 
+import me.adamix.mekanism.blocks.capabilities.InputCapability;
+import me.adamix.mekanism.blocks.capabilities.OutputCapability;
+import me.adamix.mekanism.blocks.capabilities.TransportCapability;
 import me.adamix.mekanism.blocks.components.MekanismComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyInputComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
@@ -128,40 +131,106 @@ public abstract class MekanismBlock {
 		}
 	}
 
-	public boolean canConnect(MekanismBlock mekanismBlock) {
-
-		if (mekanismBlock.hasComponent(EnergyTransportComponent.class) && this.hasComponent(EnergyTransportComponent.class)) {
-			return mekanismBlock.getId().equals(this.id);
+	public boolean canConnect(MekanismBlock otherBlock) {
+		if (otherBlock == null) {
+			return false;
 		}
 
-		int side = BlockManager.getSide(this.block, mekanismBlock.getBlock());
-		Bukkit.getLogger().info(STR."Side: + \{side}");
+		int side = BlockManager.getSide(this.block, otherBlock.getBlock());
 		if (side < 0) {
 			return false;
 		}
 
-		var energyInputComponent = this.getComponent(EnergyInputComponent.class);
-
-		System.out.println(STR."Energy Input Component\{energyInputComponent}");
-
-		if (energyInputComponent != null) {
-			boolean[] energyInputSides = energyInputComponent.getEnergyInputSides();
-			Bukkit.getLogger().info(STR."Input sides: \{Arrays.toString(energyInputSides)}");
-			if (energyInputSides[side]) {
-				return true;
+		for (MekanismComponent component : componentSet) {
+			if (component instanceof InputCapability inputCap) {
+				if (inputCap.getInputSides()[side] && canConnectWithOutput(otherBlock, inputCap)) {
+					return true;
+				}
+			} else if (component instanceof OutputCapability outputCap) {
+				if (outputCap.getOutputSides()[side] && canConnectWithInput(otherBlock, outputCap)) {
+					return true;
+				}
+			} else if (component instanceof TransportCapability transportCap) {
+				if (canConnectWithTransport(otherBlock, transportCap)) {
+					return true;
+				}
 			}
 		}
 
-		var energyOutputComponent = this.getComponent(EnergyOutputComponent.class);
+		return false;
 
-		System.out.println(STR."Energy Output Component\{energyOutputComponent}");
+//		if (mekanismBlock.hasComponent(EnergyTransportComponent.class) && this.hasComponent(EnergyTransportComponent.class)) {
+//			return mekanismBlock.getId().equals(this.id);
+//		}
+//
+//		int side = BlockManager.getSide(this.block, mekanismBlock.getBlock());
+//		if (side < 0) {
+//			return false;
+//		}
+//
+//		var energyInputComponent = this.getComponent(EnergyInputComponent.class);
+//
+//		if (energyInputComponent != null) {
+//			boolean[] energyInputSides = energyInputComponent.getEnergyInputSides();
+//			if (energyInputSides[side]) {
+//				return true;
+//			}
+//		}
+//
+//		var energyOutputComponent = this.getComponent(EnergyOutputComponent.class);
+//
+//		if (energyOutputComponent != null) {
+//			boolean[] energyOutputSides = energyOutputComponent.getEnergyOutputSides();
+//			return energyOutputSides[side];
+//		}
+	}
 
-		if (energyOutputComponent != null) {
-			boolean[] energyOutputSides = energyOutputComponent.getEnergyOutputSides();
-			Bukkit.getLogger().info(STR."Input sides: \{Arrays.toString(energyOutputSides)}");
-			return energyOutputSides[side];
+	private boolean canConnectWithOutput(MekanismBlock otherBlock, InputCapability inputCap) {
+		for (MekanismComponent component : otherBlock.getComponentSet()) {
+			if (component instanceof TransportCapability transportCap) {
+				return true;
+			}
+
+			if (component instanceof OutputCapability outputCap) {
+				int side = BlockManager.getSide(this.block, otherBlock.getBlock());
+				if (side < 0) {
+					return false;
+				}
+
+				if (inputCap.getType() == outputCap.getType() && outputCap.getOutputSides()[side]) {
+					return true;
+				}
+			}
 		}
+		return false;
+	}
 
+	private boolean canConnectWithInput(MekanismBlock otherBlock, OutputCapability outputCap) {
+		for (MekanismComponent component : otherBlock.getComponentSet()) {
+			if (component instanceof TransportCapability transportCap) {
+				return true;
+			}
+
+			if (component instanceof InputCapability inputCap) {
+				int side = BlockManager.getSide(this.block, otherBlock.getBlock());
+				if (side < 0) {
+					return false;
+				}
+
+				if (outputCap.getType() == inputCap.getType() && inputCap.getInputSides()[side]) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean canConnectWithTransport(MekanismBlock otherBlock, TransportCapability transportCap) {
+		for (MekanismComponent component : otherBlock.getComponentSet()) {
+			if (component instanceof TransportCapability otherTransportCap) {
+				return transportCap.getType() == otherTransportCap.getType() && otherBlock.getId().equals(this.id);
+			}
+		}
 		return false;
 	}
 }

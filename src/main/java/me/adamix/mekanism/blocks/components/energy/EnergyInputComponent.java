@@ -1,27 +1,31 @@
 package me.adamix.mekanism.blocks.components.energy;
 
+import me.adamix.mekanism.blocks.capabilities.CapabilityType;
+import me.adamix.mekanism.blocks.capabilities.InputCapability;
 import me.adamix.mekanism.blocks.components.MekanismComponent;
 
 import java.util.Arrays;
 
-public class EnergyInputComponent implements MekanismComponent {
+public class EnergyInputComponent implements MekanismComponent, InputCapability {
 
-	private boolean[] energyInputSides = new boolean[6];
-
-	public EnergyInputComponent() {
-	}
+	private boolean[] energyInputSides;
 
 	public EnergyInputComponent(boolean[] energyInputSides) {
 		this.energyInputSides = energyInputSides;
 	}
 
-	public boolean[] getEnergyInputSides() {
-		return energyInputSides;
+	@Override
+	public CapabilityType getType() {
+		return CapabilityType.ENERGY;
 	}
 
 	@Override
-	public String toString() {
-		return STR."EnergyInputComponent{energyInputSides=\{Arrays.toString(energyInputSides)}}";
+	public boolean[] getInputSides() {
+		return this.energyInputSides;
 	}
 
+	@Override
+	public void setInputSides(boolean[] inputSides) {
+
+	}
 }

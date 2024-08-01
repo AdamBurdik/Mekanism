@@ -5,7 +5,9 @@ import me.adamix.mekanism.blocks.MekanismBlock;
 import me.adamix.mekanism.blocks.components.energy.EnergyInputComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyStorageComponent;
+import me.adamix.mekanism.blocks.components.energy.EnergyTransportComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +15,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class EnergyCommand implements CommandExecutor {
+
+	private void tempSendEnergy(MekanismBlock mekanismBlock, Player player) {
+		// TODO
+	}
+
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -41,8 +52,8 @@ public class EnergyCommand implements CommandExecutor {
 		String subcommand = args[0];
 		switch (subcommand.toLowerCase()) {
 			case "send_energy":
-				// TODO Add send energy debug command
-
+				tempSendEnergy(mekanismBlock, player);
+				return false;
 			case "fill":
 				if (energyStorage == null) {
 					return false;
