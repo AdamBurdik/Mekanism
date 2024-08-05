@@ -3,10 +3,10 @@ package me.adamix.mekanism.tasks;
 import me.adamix.mekanism.Mekanism;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -27,20 +27,23 @@ public class ChunkTaskManager {
 	}
 
 	private static Set<Chunk> getChunksLoadedByPlayers() {
+
 		Set<Chunk> chunks = new CopyOnWriteArraySet<>();
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			World world = player.getWorld();
-			Location loc = player.getLocation();
-			int radius = player.getSimulationDistance();
+			chunks.addAll(List.of(world.getLoadedChunks()));
 
-			int centerX = loc.getBlockX() >> 4;
-			int centerZ = loc.getBlockZ() >> 4;
-
-			for (int x = -radius; x <= radius; x++) {
-				for (int z = -radius; z <= radius; z++) {
-					chunks.add(world.getChunkAt(centerX + x, centerZ + z));
-				}
-			}
+//			Location loc = player.getLocation();
+//			int radius = player.getSimulationDistance();
+//
+//			int centerX = loc.getBlockX() >> 4;
+//			int centerZ = loc.getBlockZ() >> 4;
+//
+//			for (int x = -radius; x <= radius; x++) {
+//				for (int z = -radius; z <= radius; z++) {
+//					chunks.add(world.getChunkAt(centerX + x, centerZ + z));
+//				}
+//			}
 		}
 		return chunks;
 	}

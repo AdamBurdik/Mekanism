@@ -15,6 +15,6 @@ public class EnergyGeneratorComponent implements MekanismComponent {
 
 	@Override
 	public String toString() {
-		return STR."EnergyGeneratorComponent{generateRate=\{generateRate}}";
+		return "EnergyGeneratorComponent{generateRate=}" + generateRate;
 	}
 }

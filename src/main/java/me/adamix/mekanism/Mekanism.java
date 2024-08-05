@@ -10,6 +10,9 @@ import me.adamix.mekanism.blocks.transport.cables.UniversalCableUltimate;
 import me.adamix.mekanism.commands.EnergyCommand;
 import me.adamix.mekanism.commands.GiveMachinesCommand;
 import me.adamix.mekanism.listener.PlayerListener;
+import me.adamix.mekanism.tasks.BlockUpdateTaskManager;
+import me.adamix.mekanism.views.ViewManager;
+import me.devnatan.inventoryframework.ViewFrame;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +24,10 @@ public final class Mekanism extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
+		ViewManager.init(this);
+//		ChunkTaskManager.startChunkUpdateTask();
+		BlockUpdateTaskManager.startUpdateTask(this);
+
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Objects.requireNonNull(getCommand("mekanism")).setExecutor(new GiveMachinesCommand());
 		Objects.requireNonNull(getCommand("energy")).setExecutor(new EnergyCommand());

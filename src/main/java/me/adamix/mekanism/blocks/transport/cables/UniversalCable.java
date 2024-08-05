@@ -4,6 +4,7 @@ import me.adamix.mekanism.Mekanism;
 import me.adamix.mekanism.blocks.BlockManager;
 import me.adamix.mekanism.blocks.MekanismBlock;
 import me.adamix.mekanism.blocks.components.energy.EnergyTransportComponent;
+import me.adamix.mekanism.transports.TransportType;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -47,7 +48,7 @@ public class UniversalCable extends MekanismBlock {
 		StringBuilder stringModel = new StringBuilder();
 		for (Block surroundingBlock : surroundingBlocks) {
 			MekanismBlock mekanismBlock = BlockManager.getBlock(surroundingBlock);
-			if (mekanismBlock == null || !mekanismBlock.canConnect(this)) {
+			if (mekanismBlock == null || !mekanismBlock.canConnect(this, TransportType.ANY)) {
 				stringModel.append("0");
 			} else {
 				stringModel.append("1");

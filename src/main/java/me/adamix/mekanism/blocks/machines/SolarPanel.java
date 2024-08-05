@@ -4,6 +4,7 @@ import me.adamix.mekanism.Mekanism;
 import me.adamix.mekanism.blocks.MekanismBlock;
 import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyStorageComponent;
+import me.adamix.mekanism.transports.EnergyTransport;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -29,6 +30,14 @@ public class SolarPanel extends MekanismBlock {
 
 		getBlock().setType(BLOCK_MATERIAL);
 		spawnArmorStand();
+	}
+
+	@Override
+	public void onUpdate() {
+		var energyStorageComponent = getComponent(EnergyStorageComponent.class);
+		if (!energyStorageComponent.isEmpty()) {
+			EnergyTransport.sendEnergy(this, energyStorageComponent.getCurrentEnergyCapacity());
+		}
 	}
 
 	@Override

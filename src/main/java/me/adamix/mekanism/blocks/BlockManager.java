@@ -38,7 +38,7 @@ public class BlockManager {
 		Class<? extends MekanismBlock> clazz = registeredBlocks.get(id);
 
 		if (clazz == null) {
-			throw new RuntimeException(STR."No block registered with ID: \{id}");
+			throw new RuntimeException("No block registered with ID: " + id);
 		}
 
 		try {

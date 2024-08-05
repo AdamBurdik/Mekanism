@@ -1,6 +1,7 @@
 package me.adamix.mekanism.blocks.components.energy;
 
 import me.adamix.mekanism.blocks.components.MekanismComponent;
+import org.bukkit.Bukkit;
 
 public class EnergyStorageComponent implements MekanismComponent {
 	private float currentEnergyCapacity = 0;
@@ -34,9 +35,17 @@ public class EnergyStorageComponent implements MekanismComponent {
 		return maxEnergyCapacity;
 	}
 
+	public boolean isFull() {
+		return currentEnergyCapacity >= maxEnergyCapacity;
+	}
+
+	public boolean isEmpty() {
+		return currentEnergyCapacity <= 0;
+	}
+
 	@Override
 	public String toString() {
-		return STR."EnergyStorageComponent{currentEnergyCapacity=\{currentEnergyCapacity},maxEnergyCapacity=\{maxEnergyCapacity}}";
+		return "EnergyStorageComponent{currentEnergyCapacity=" + currentEnergyCapacity + ",maxEnergyCapacity=}" + maxEnergyCapacity;
 	}
 
 }

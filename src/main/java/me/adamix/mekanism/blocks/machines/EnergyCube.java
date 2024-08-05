@@ -5,6 +5,8 @@ import me.adamix.mekanism.blocks.MekanismBlock;
 import me.adamix.mekanism.blocks.components.energy.EnergyInputComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyStorageComponent;
+import me.adamix.mekanism.views.BasicEnergyCubeView;
+import me.adamix.mekanism.views.ViewManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -24,8 +26,8 @@ public class EnergyCube extends MekanismBlock {
 	@Override
 	public void onPlace(Player player) {
 		var energyStorageComponent = new EnergyStorageComponent(2000000);
-		var energyOutputComponent = new EnergyOutputComponent(16000, new boolean[]{true, false, true, false, true, false});
-		var energyInputComponent = new EnergyInputComponent(new boolean[]{false, false, false, false, false, false});
+		var energyOutputComponent = new EnergyOutputComponent(16000, new boolean[]{false, false, false, false, false, false});
+		var energyInputComponent = new EnergyInputComponent(new boolean[]{true, false, true, false, true, false});
 		addComponent(energyStorageComponent, energyOutputComponent, energyInputComponent);
 
 		spawnArmorStand();
@@ -43,6 +45,11 @@ public class EnergyCube extends MekanismBlock {
 		item.setItemMeta(meta);
 
 		return item;
+	}
+
+	@Override
+	public void onRightClick(Player player) {
+		ViewManager.openMenu(player, BasicEnergyCubeView.class);
 	}
 
 	@Override
