@@ -27,7 +27,7 @@ public class EnergyCube extends MekanismBlock {
 	public void onPlace(Player player) {
 		var energyStorageComponent = new EnergyStorageComponent(2000000);
 		var energyOutputComponent = new EnergyOutputComponent(16000, new boolean[]{false, false, false, false, false, false});
-		var energyInputComponent = new EnergyInputComponent(new boolean[]{true, false, true, false, true, false});
+		var energyInputComponent = new EnergyInputComponent(new boolean[]{true, false, true, false, false, false});
 		addComponent(energyStorageComponent, energyOutputComponent, energyInputComponent);
 
 		spawnArmorStand();
@@ -49,7 +49,7 @@ public class EnergyCube extends MekanismBlock {
 
 	@Override
 	public void onRightClick(Player player) {
-		ViewManager.openMenu(player, BasicEnergyCubeView.class);
+		ViewManager.getViewFrame().open(BasicEnergyCubeView.class, player, this);
 	}
 
 	@Override

@@ -14,8 +14,7 @@ public class ViewManager {
 
 	}
 
-	public static void openMenu(Player player, Class<? extends BasicEnergyCubeView> clazz) {
-		viewFrame.open(clazz, player);
+	public static ViewFrame getViewFrame() {
+		return viewFrame;
 	}
-
 }

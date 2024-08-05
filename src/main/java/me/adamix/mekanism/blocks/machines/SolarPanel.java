@@ -5,6 +5,7 @@ import me.adamix.mekanism.blocks.MekanismBlock;
 import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
 import me.adamix.mekanism.blocks.components.energy.EnergyStorageComponent;
 import me.adamix.mekanism.transports.EnergyTransport;
+import me.adamix.mekanism.views.ViewManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -38,6 +39,9 @@ public class SolarPanel extends MekanismBlock {
 		if (!energyStorageComponent.isEmpty()) {
 			EnergyTransport.sendEnergy(this, energyStorageComponent.getCurrentEnergyCapacity());
 		}
+		// TEMPORARY GENERATION OF ENERGY
+		energyStorageComponent.addEnergy(60);
+
 	}
 
 	@Override
