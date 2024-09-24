@@ -1,64 +1,120 @@
 package me.adamix.mekanism.blocks.machines;
 
-import me.adamix.mekanism.Mekanism;
+import me.adamix.mekanism.MekanismPlugin;
 import me.adamix.mekanism.blocks.MekanismBlock;
-import me.adamix.mekanism.blocks.components.energy.EnergyInputComponent;
-import me.adamix.mekanism.blocks.components.energy.EnergyOutputComponent;
-import me.adamix.mekanism.blocks.components.energy.EnergyStorageComponent;
-import me.adamix.mekanism.views.BasicEnergyCubeView;
-import me.adamix.mekanism.views.ViewManager;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import me.adamix.mekanism.components.EnergyComponent;
+import me.adamix.mekanism.utils.EntityUtils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Vector;
 
-public class EnergyCube extends MekanismBlock {
-	private static final int BLOCK_CMD = 100;
-	private static final Material BLOCK_MATERIAL = Material.BARRIER;
-	public EnergyCube(String id, Block block) {
-		super(id, block);
+import java.util.UUID;
+
+public class EnergyCube extends MekanismBlock implements EnergyComponent {
+
+	private final long energyCapacity;
+	private final Material blockType = Material.BARRIER;
+	private final Material itemType = Material.BEACON;
+
+	public EnergyCube(int customModelData, long energyCapacity) {
+		super(customModelData);
+		this.energyCapacity = energyCapacity;
 	}
 
 	@Override
-	public void onPlace(Player player) {
-		var energyStorageComponent = new EnergyStorageComponent(2000000);
-		var energyOutputComponent = new EnergyOutputComponent(16000, new boolean[]{false, false, false, false, false, false});
-		var energyInputComponent = new EnergyInputComponent(new boolean[]{true, false, true, false, false, false});
-		addComponent(energyStorageComponent, energyOutputComponent, energyInputComponent);
+	public void onPlace(Location location) {
+		location.getBlock().setType(blockType);
+		var entity = EntityUtils.spawnEntity(location, customModelData, itemType);
 
-		spawnArmorStand();
+		var memory = blockMemory.createMemory(location);
+		memory.set("entity", entity.getUniqueId());
+		memory.set("input_sides", new boolean[] {true, true, true, false, false, false});
+		memory.set("output_sides", new boolean[] {false, false, false, true, false, false});
+		memory.set("energy_capacity", energyCapacity);
+		memory.set("stored_energy", 0L);
+		memory.set("timer", 0);
+		memory.set("hologram", null);
+		memory.set("given_amount", 0);
+		memory.set("per_second", 0);
 	}
 
 	@Override
-	public ItemStack getItem() {
-		NamespacedKey key = new NamespacedKey(Mekanism.getInstance(), "block-type");
-		ItemStack item = new ItemStack(Material.BEACON);
+	public void tick(Location location) {
+		var memory = blockMemory.getMemory(location);
+		int timer = memory.getInt("timer");
+		long storedEnergy = memory.getLong("stored_energy");
+		int givenAmount = memory.getInt("given_amount");
 
-		ItemMeta meta = item.getItemMeta();
-		meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, getId());
-		meta.displayName(MiniMessage.miniMessage().deserialize("<yellow>Energy Cube"));
-		meta.setCustomModelData(BLOCK_CMD);
-		item.setItemMeta(meta);
+		if (timer > 3) {
+			memory.set("per_second", givenAmount);
+			memory.set("given_amount", 0);
+			timer = 0;
+		}
 
-		return item;
+		int perSecond = memory.getInt("per_second");
+
+		UUID hologramUUID = blockMemory.getMemory(location).getUUID("hologram");
+		Bukkit.getScheduler().runTask(MekanismPlugin.getInstance(), () -> {
+			String text = storedEnergy + "/" + energyCapacity + " | " + perSecond + "J/s";
+			Component component = Component.text(text).color(TextColor.color(0, 255, 0));
+			UUID uuid = EntityUtils.showHologram(hologramUUID, component, location, new Vector(0, 0, 0));
+			memory.set("hologram", uuid);
+		});
+
+		memory.set("timer", timer + 1);
 	}
 
 	@Override
-	public void onRightClick(Player player) {
-		ViewManager.getViewFrame().open(BasicEnergyCubeView.class, player, this);
+	public void setInputSides(Location location, boolean[] inputSides) {
+		var memory = blockMemory.getMemory(location);
+		memory.set("input_sides", inputSides);
 	}
 
 	@Override
-	public int getBlockCMD() {
-		return BLOCK_CMD;
+	public void setOutputSides(Location location, boolean[] outputSides) {
+		var memory = blockMemory.getMemory(location);
+		memory.set("output_sides", outputSides);
 	}
 
 	@Override
-	public Material getBlockMaterial() {
-		return BLOCK_MATERIAL;
+	public boolean[] getInputSides(Location location) {
+		var memory = blockMemory.getMemory(location);
+		return memory.getBooleanArray("input_sides");
+	}
+
+	@Override
+	public boolean[] getOutputSides(Location location) {
+		var memory = blockMemory.getMemory(location);
+		return memory.getBooleanArray("output_sides");
+	}
+
+	@Override
+	public long getStoredEnergy(Location location) {
+		var memory = blockMemory.getMemory(location);
+		return memory.getLong("stored_energy");
+	}
+
+	@Override
+	public void setStoredEnergy(Location location, long amount) {
+		var memory = blockMemory.getMemory(location);
+		memory.set("stored_energy", amount);
+	}
+
+	@Override
+	public long getEnergyCapacity(Location location) {
+		return this.energyCapacity;
+	}
+
+	@Override
+	public Material getBlockType() {
+		return blockType;
+	}
+
+	@Override
+	public Material getItemType() {
+		return itemType;
 	}
 }

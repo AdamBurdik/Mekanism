@@ -1,10 +1,8 @@
-name: Mekanism
+name: MekanismPlugin
 version: '1.0'
-main: me.adamix.mekanism.Mekanism
+main: me.adamix.mekanism.MekanismPlugin
 api-version: '1.20'
 #depend: [InventoryFramework ]
 commands:
     mekanism:
         description: Main plugin command
-    energy:
-        description: Debug command
