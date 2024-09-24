@@ -8,6 +8,7 @@ import me.adamix.mekanism.managers.BlockManager;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConnectionUtils {
@@ -68,8 +69,10 @@ public class ConnectionUtils {
 			String id = blockManager.getId(surrounding);
 			MekanismBlock other = blockManager.getRegistered(id);
 			if (other instanceof EnergyComponent energyComponent) {
-				if (!canCableConnect(block, other, location, surrounding)) {
-					continue;
+				if (block instanceof CableComponent) {
+					if (!canCableConnect(block, other, location, surrounding)) {
+						continue;
+					}
 				}
 
 				if (!canConnect(block, other, location, surrounding)) {

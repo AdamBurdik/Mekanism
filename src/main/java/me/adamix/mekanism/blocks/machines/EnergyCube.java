@@ -35,36 +35,6 @@ public class EnergyCube extends MekanismBlock implements EnergyComponent {
 		memory.set("output_sides", new boolean[] {false, false, false, true, false, false});
 		memory.set("energy_capacity", energyCapacity);
 		memory.set("stored_energy", 0L);
-		memory.set("timer", 0);
-		memory.set("hologram", null);
-		memory.set("given_amount", 0);
-		memory.set("per_second", 0);
-	}
-
-	@Override
-	public void tick(Location location) {
-		var memory = blockMemory.getMemory(location);
-		int timer = memory.getInt("timer");
-		long storedEnergy = memory.getLong("stored_energy");
-		int givenAmount = memory.getInt("given_amount");
-
-		if (timer > 3) {
-			memory.set("per_second", givenAmount);
-			memory.set("given_amount", 0);
-			timer = 0;
-		}
-
-		int perSecond = memory.getInt("per_second");
-
-		UUID hologramUUID = blockMemory.getMemory(location).getUUID("hologram");
-		Bukkit.getScheduler().runTask(MekanismPlugin.getInstance(), () -> {
-			String text = storedEnergy + "/" + energyCapacity + " | " + perSecond + "J/s";
-			Component component = Component.text(text).color(TextColor.color(0, 255, 0));
-			UUID uuid = EntityUtils.showHologram(hologramUUID, component, location, new Vector(0, 0, 0));
-			memory.set("hologram", uuid);
-		});
-
-		memory.set("timer", timer + 1);
 	}
 
 	@Override

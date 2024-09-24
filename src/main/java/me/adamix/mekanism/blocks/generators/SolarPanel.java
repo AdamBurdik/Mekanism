@@ -39,14 +39,13 @@ public class SolarPanel extends MekanismBlock implements EnergyComponent {
 
 		var memory = blockMemory.createMemory(location);
 		memory.set("entity", entity.getUniqueId());
-		memory.set("hologram", null);
 		memory.set("energy_capacity", energyCapacity);
 		memory.set("stored_energy", 0L);
 		memory.set("generation_rate", generationRate);
 	}
 
 	private void sendEnergy(Location location) {
-		var output = ConnectionUtils.getEnergyBlockOnNetwork(this, location, 0, 100, new ArrayList<>());
+		var output = ConnectionUtils.getEnergyBlockOnNetwork(this, location, 500, 100, new ArrayList<>());
 		if (output == null) {
 			return;
 		}
@@ -63,10 +62,6 @@ public class SolarPanel extends MekanismBlock implements EnergyComponent {
 			long canFit = Math.max(0, otherEnergyCapacity - otherStoredEnergy);
 			long canSend = Math.min(canFit, maxTransportRate);
 			long result = Math.min(storedEnergy, canSend);
-
-			var otherMemory = mekanismBlock.getBlockMemory().getMemory(otherLocation);
-			int givenAmount = otherMemory.getInt("given_amount");
-			otherMemory.set("given_amount", (int) (givenAmount + result));
 
 			setStoredEnergy(location, storedEnergy - result);
 			energyComponent.setStoredEnergy(otherLocation, otherStoredEnergy + result);
